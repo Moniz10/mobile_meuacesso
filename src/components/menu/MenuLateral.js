@@ -46,8 +46,8 @@ export default function MenuLateral({ visivel, onFechar, rotaAtual, user, onNave
 
   if (!montado) return null;
 
-  const nome = user?.name || 'Ana Machava';
-  const codigo = user?.codigo || '48213';
+  const nome = user?.name || 'Utilizador';
+  const codigo = user?.numero || '----';
 
   return (
     <Modal transparent visible statusBarTranslucent animationType="none" onRequestClose={onFechar}>

@@ -14,7 +14,7 @@ export default function CartaoDocumento({ documento, onPress }) {
         <Text className="font-manrope-bold text-base text-ink">{documento.titulo}</Text>
         <Text className="font-manrope-medium text-sm text-muted mt-0.5">{documento.descricao}</Text>
       </View>
-      <Etiqueta estado={documento.estado} />
+      {documento.estado ? <Etiqueta estado={documento.estado} /> : null}
     </Pressable>
   );
 }

@@ -1,20 +1,30 @@
-// import api from './api';
+import api from './api';
 
-export async function login(email, password) {
-  // Simulação: entra sempre, sem validar nada.
-  await new Promise((resolve) => setTimeout(resolve, 600));
+// Login por email OU telemóvel. Devolve { token, user }.
+export async function login(identificador, password) {
+  const { data } = await api.post('/login', { login: identificador.trim(), password });
+  const u = data.utilizador;
+
   return {
-    token: 'token-de-demonstracao',
-    user: { name: 'Ana Machava', email, codigo: '48213' },
+    token: u.token,
+    user: {
+      uuid: u.uuid,
+      numero: u.numero, // código único de 4 dígitos (vai no QR code)
+      name: u.nome,
+      email: u.email,
+      telemovel: u.telefone,
+      tipo: u.tipo,
+    },
   };
 }
 
+// Cria a conta. (O login é feito a seguir, no AuthContext.)
 export async function register({ nome, telemovel, email, password }) {
-  // Simulação: cria sempre, sem validar nada.
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  const codigo = String(Math.floor(10000 + Math.random() * 90000)); // 5 dígitos
-  return {
-    token: 'token-de-demonstracao',
-    user: { name: nome || 'Ana Machava', telemovel, email, codigo },
-  };
+  await api.post('/registro', {
+    nome: nome.trim(),
+    email: email.trim(),
+    telefone: telemovel.trim(),
+    password,
+    password_confirmation: password,
+  });
 }

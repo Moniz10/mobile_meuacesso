@@ -2,9 +2,9 @@ import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-// Cartão verde com o código único de 5 dígitos e o botão do QR.
-export default function CartaoCodigo({ codigo = '00000', onMostrarQR }) {
-  const digitos = String(codigo).padStart(5, '0').slice(0, 5).split('');
+// Cartão verde com o código único de 4 dígitos e o botão do QR.
+export default function CartaoCodigo({ codigo = '0000', onMostrarQR }) {
+  const digitos = String(codigo).padStart(4, '0').slice(0, 4).split('');
 
   return (
     <View className="mt-6 overflow-hidden rounded-3xl bg-primary p-5">

@@ -3,17 +3,20 @@ import { Pressable, Text, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
+import iniciais from '../../utils/iniciais';
 import useAuth from '../../hooks/useAuth';
+import useToast from '../../hooks/useToast';
 import useTopoSeguro from '../../hooks/useTopoSeguro';
 import { MenuLateral } from '../menu';
 
-// Barra do topo: menu, marca MeuAcesso e notificações.
+// Barra do topo: menu, marca MeuAcesso e o círculo do perfil.
 // O botão ☰ abre o menu lateral.
-export default function AppHeader({ onNotificacoes, temNotificacoes = true }) {
+export default function AppHeader() {
   const topo = useTopoSeguro();
   const navigation = useNavigation();
   const route = useRoute();
   const { user, signOut } = useAuth();
+  const { mostrarToast } = useToast();
   const [menuAberto, setMenuAberto] = useState(false);
 
   const navegar = (rota) => {
@@ -24,6 +27,7 @@ export default function AppHeader({ onNotificacoes, temNotificacoes = true }) {
   const sair = () => {
     setMenuAberto(false);
     signOut();
+    mostrarToast('Sessão terminada', 'Até breve!');
   };
 
   return (
@@ -44,15 +48,13 @@ export default function AppHeader({ onNotificacoes, temNotificacoes = true }) {
           <Text className="font-manrope-extrabold text-lg text-ink">MeuAcesso</Text>
         </View>
 
+        {/* Círculo com as iniciais: toca-se para ver/editar os dados */}
         <Pressable
-          onPress={onNotificacoes}
+          onPress={() => navigation.navigate('Profile')}
           hitSlop={6}
-          className="w-11 h-11 items-center justify-center rounded-xl border border-line bg-canvas active:bg-field"
+          className="w-11 h-11 items-center justify-center rounded-full bg-primary active:bg-primary-700"
         >
-          <Feather name="bell" size={20} color="#14231C" />
-          {temNotificacoes && (
-            <View className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-[#F59E0B] border-2 border-canvas" />
-          )}
+          <Text className="font-manrope-extrabold text-sm text-white">{iniciais(user?.name) || '?'}</Text>
         </Pressable>
       </View>
 

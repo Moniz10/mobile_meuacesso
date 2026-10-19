@@ -31,9 +31,7 @@ export default function AuthLayout({ children, onBack, nota }) {
             ) : (
               <View className="w-11" />
             )}
-            <Text className="font-manrope-extrabold text-lg text-primary tracking-wide">
-              MeuAcesso
-            </Text>
+          
             <View className="w-11" />
           </View>
 

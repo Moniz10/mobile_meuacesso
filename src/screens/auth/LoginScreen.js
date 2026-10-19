@@ -6,22 +6,39 @@ import {
   BotaoGoogle,
   BotaoPrimario,
   Cabecalho,
+  CaixaErro,
   Campo,
   Divisor,
   LinkRodape,
 } from '../../components/ui';
 import useAuth from '../../hooks/useAuth';
+import useToast from '../../hooks/useToast';
+import { mensagemDeErro } from '../../utils/erros';
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation, route }) {
   const { signIn } = useAuth();
-  const [email, setEmail] = useState('');
+  const { mostrarToast } = useToast();
+  const [email, setEmail] = useState(route?.params?.email ?? '');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState(null);
 
-  // Sem validações: ao clicar, segue em frente.
   const entrar = async () => {
+    setErro(null);
+
+    if (!email.trim() || !password) {
+      setErro('Escreva o email (ou telemóvel) e a palavra-passe.');
+      return;
+    }
+
     setLoading(true);
-    await signIn(email, password);
+    try {
+      const nome = await signIn(email, password); // se correr bem, a app muda sozinha para o Início
+      mostrarToast(`Boas-vindas, ${nome}!`, 'Sessão iniciada com sucesso.');
+    } catch (e) {
+      setErro(mensagemDeErro(e, 'Não foi possível entrar.'));
+      setLoading(false);
+    }
   };
 
   return (
@@ -53,6 +70,8 @@ export default function LoginScreen({ navigation }) {
       <Pressable className="self-start -mt-1 mb-6" hitSlop={8}>
         <Text className="font-manrope-semibold text-sm text-primary">Esqueci a palavra-passe</Text>
       </Pressable>
+
+      <CaixaErro texto={erro} />
 
       <BotaoPrimario titulo="Entrar" onPress={entrar} loading={loading} />
       {/* <Divisor /> */}

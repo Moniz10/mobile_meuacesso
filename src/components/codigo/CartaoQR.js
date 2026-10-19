@@ -2,9 +2,9 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
-// Cartão branco (borda 1px) com o QR e os 5 dígitos por baixo.
-export default function CartaoQR({ codigo = '00000' }) {
-  const digitos = String(codigo).padStart(5, '0').slice(0, 5).split('');
+// Cartão branco (borda 1px) com o QR e os 4 dígitos por baixo.
+export default function CartaoQR({ codigo = '0000' }) {
+  const digitos = String(codigo).padStart(4, '0').slice(0, 4).split('');
 
   return (
     <View className="items-center rounded-3xl border border-line bg-white px-6 pt-7 pb-6">

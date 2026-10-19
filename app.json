@@ -13,7 +13,14 @@
     "plugins": [
       "expo-status-bar",
       "expo-font",
-      "expo-splash-screen"
+      "expo-splash-screen",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "O MeuAcesso precisa da câmara para fotografar o seu BI e a sua fotografia.",
+          "photosPermission": "O MeuAcesso precisa de aceder às suas fotos para escolher o seu BI e a sua fotografia."
+        }
+      ]
     ]
   }
 }

@@ -11,47 +11,50 @@ const ICONES = {
   Historico: { lib: Feather, nome: 'clock' },
 };
 
-// Barra de separadores do fundo, desenhada à medida.
+// Barra do fundo moderna: uma "pílula" flutuante, tudo redondo.
+// O separador activo vira uma pílula verde com ícone + nome; os outros são só círculos.
 export default function TabBar({ state, descriptors, navigation }) {
   const insets = useSafeAreaInsets();
 
   return (
-    <View
-      className="flex-row bg-white border-t border-line px-2 pt-2"
-      style={{ paddingBottom: Math.max(insets.bottom, 10) }}
-    >
-      {state.routes.map((route, index) => {
-        const ativo = state.index === index;
-        const { options } = descriptors[route.key];
-        const titulo = options.title ?? route.name;
-        const icone = ICONES[route.name] ?? { lib: Feather, nome: 'circle' };
-        const Icone = icone.lib;
-        const cor = ativo ? '#0F6B4F' : '#5F6B66';
+    <View className="bg-canvas px-4 pt-2" style={{ paddingBottom: Math.max(insets.bottom, 12) }}>
+      <View
+        className="flex-row items-center justify-between rounded-full bg-white p-2"
+        style={{
+          shadowColor: '#000',
+          shadowOpacity: 0.12,
+          shadowRadius: 16,
+          shadowOffset: { width: 0, height: 6 },
+          elevation: 10,
+        }}
+      >
+        {state.routes.map((route, index) => {
+          const ativo = state.index === index;
+          const { options } = descriptors[route.key];
+          const titulo = options.title ?? route.name;
+          const icone = ICONES[route.name] ?? { lib: Feather, nome: 'circle' };
+          const Icone = icone.lib;
 
-        const abrir = () => {
-          const evento = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
-          if (!ativo && !evento.defaultPrevented) navigation.navigate(route.name);
-        };
+          const abrir = () => {
+            const evento = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
+            if (!ativo && !evento.defaultPrevented) navigation.navigate(route.name);
+          };
 
-        return (
-          <Pressable key={route.key} onPress={abrir} className="flex-1 items-center py-1">
-            <View
-              className={`w-14 h-8 items-center justify-center rounded-full ${
-                ativo ? 'bg-primary-50' : ''
+          return (
+            <Pressable
+              key={route.key}
+              onPress={abrir}
+              android_ripple={null}
+              className={`h-12 flex-row items-center justify-center rounded-full ${
+                ativo ? 'bg-primary px-5 gap-2' : 'w-12 active:bg-field'
               }`}
             >
-              <Icone name={icone.nome} size={21} color={cor} />
-            </View>
-            <Text
-              className={`mt-1 text-xs ${
-                ativo ? 'font-manrope-bold text-primary' : 'font-manrope-medium text-muted'
-              }`}
-            >
-              {titulo}
-            </Text>
-          </Pressable>
-        );
-      })}
+              <Icone name={icone.nome} size={21} color={ativo ? '#FFFFFF' : '#5F6B66'} />
+              {ativo ? <Text className="font-manrope-bold text-sm text-white">{titulo}</Text> : null}
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }

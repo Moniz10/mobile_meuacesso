@@ -5,12 +5,18 @@ import { Feather } from '@expo/vector-icons';
 import { BarraVoltar, Grupo } from '../../components/app';
 import { CartaoPerfil, LinhaInfo } from '../../components/perfil';
 import useAuth from '../../hooks/useAuth';
+import useToast from '../../hooks/useToast';
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
+  const { mostrarToast } = useToast();
+  const sair = () => {
+    signOut();
+    mostrarToast('Sessão terminada', 'Até breve!');
+  };
 
-  const nome = user?.name || 'Ana Machava';
-  const codigo = user?.codigo || '48213';
+  const nome = user?.name || 'Utilizador';
+  const codigo = user?.numero || '----';
 
   return (
     <View className="flex-1 bg-canvas">
@@ -25,8 +31,8 @@ export default function ProfileScreen() {
 
         <Grupo titulo="Dados pessoais">
           <LinhaInfo icone="user" rotulo="Nome completo" valor={nome} />
-          <LinhaInfo icone="phone" rotulo="Telemóvel" valor={user?.telemovel || '84 123 4567'} />
-          <LinhaInfo icone="mail" rotulo="Email" valor={user?.email || 'ana.machava@exemplo.com'} />
+          <LinhaInfo icone="phone" rotulo="Telemóvel" valor={user?.telemovel || '—'} />
+          <LinhaInfo icone="mail" rotulo="Email" valor={user?.email || '—'} />
         </Grupo>
 
         {/* Sem funcionalidade por agora */}
@@ -36,7 +42,7 @@ export default function ProfileScreen() {
         </Pressable>
 
         <Pressable
-          onPress={signOut}
+          onPress={sair}
           className="mt-3 h-14 flex-row items-center justify-center gap-2 rounded-2xl border border-[#F2C4BF] bg-[#FEF3F2] active:opacity-80"
         >
           <Feather name="log-out" size={17} color="#B42318" />

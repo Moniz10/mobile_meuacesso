@@ -7,3 +7,4 @@ export { default as Divisor } from './Divisor';
 export { default as CaixaSelecao } from './CaixaSelecao';
 export { default as Secao } from './Secao';
 export { default as LinkRodape } from './LinkRodape';
+export { default as CaixaErro } from './CaixaErro';

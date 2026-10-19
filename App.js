@@ -14,6 +14,7 @@ import {
 } from '@expo-google-fonts/manrope';
 
 import { AuthProvider } from './src/context/AuthContext';
+import { ToastProvider } from './src/context/ToastContext';
 import AppNavigator from './src/navigation/AppNavigator';
 
 // Mantém o ecrã de arranque visível até as fontes estarem carregadas.
@@ -40,10 +41,15 @@ export default function App() {
     <SafeAreaProvider>
       <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
         <AuthProvider>
-          <StatusBar style="dark" />
-          <AppNavigator />
+          <ToastProvider>
+            <StatusBar style="dark" />
+            <AppNavigator />
+          </ToastProvider>
         </AuthProvider>
       </View>
     </SafeAreaProvider>
   );
+
+  
 }
+

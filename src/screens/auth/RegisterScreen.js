@@ -6,6 +6,7 @@ import {
   BotaoGoogle,
   BotaoPrimario,
   Cabecalho,
+  CaixaErro,
   CaixaSelecao,
   Campo,
   Divisor,
@@ -13,27 +14,46 @@ import {
   Secao,
 } from '../../components/ui';
 import useAuth from '../../hooks/useAuth';
+import useToast from '../../hooks/useToast';
+import { mensagemDeErro } from '../../utils/erros';
 
 export default function RegisterScreen({ navigation }) {
   const { signUp } = useAuth();
+  const { mostrarToast } = useToast();
   const [nome, setNome] = useState('');
   const [telemovel, setTelemovel] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [autorizo, setAutorizo] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState(null);
 
-  // Sem validações: ao clicar, segue em frente.
   const criarConta = async () => {
+    setErro(null);
+
+    if (nome.trim().length < 3) return setErro('Escreva o seu nome completo.');
+    if (!telemovel.trim()) return setErro('Escreva o número de telemóvel.');
+    if (!email.trim()) return setErro('Escreva o seu email.');
+    if (password.length < 8) return setErro('A palavra-passe deve ter pelo menos 8 caracteres.');
+    if (!autorizo) return setErro('Para continuar, aceite a autorização de consulta dos dados.');
+
     setLoading(true);
-    await signUp({ nome, telemovel, email, password });
+    try {
+      await signUp({ nome, telemovel, email, password });
+      setLoading(false);
+      mostrarToast('Conta criada!', 'Agora entre com o seu email e palavra-passe.');
+      navigation.navigate('Login', { email: email.trim() });
+    } catch (e) {
+      setErro(mensagemDeErro(e, 'Não foi possível criar a conta.'));
+      setLoading(false);
+    }
   };
 
   return (
     <AuthLayout onBack={() => navigation.goBack()}>
       <Cabecalho
         titulo="Criar conta"
-        subtitulo="Depois de criar a conta recebe o seu código de 5 dígitos e o QR code."
+        subtitulo="Depois de criar a conta recebe o seu código de 4 dígitos e o QR code."
       />
 
       <Secao titulo="Dados pessoais">
@@ -83,6 +103,8 @@ export default function RegisterScreen({ navigation }) {
           texto="Autorizo as instituições a consultar os meus dados quando apresento o meu código ou QR."
         />
       </View>
+
+      <CaixaErro texto={erro} />
 
       <BotaoPrimario titulo="Criar conta" onPress={criarConta} loading={loading} />
       {/* <Divisor />

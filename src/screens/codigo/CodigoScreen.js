@@ -19,10 +19,10 @@ export default function CodigoScreen() {
       >
         <TituloEcra
           titulo="O meu código"
-          subtitulo="Mostre o QR à recepção ou diga os 5 dígitos."
+          subtitulo="Mostre o QR à recepção ou diga os 4 dígitos."
         />
 
-        <CartaoQR codigo={user?.codigo || '48213'} />
+        <CartaoQR codigo={user?.numero || '0000'} />
 
         <View className="mt-5">
           <Aviso texto="A instituição só vê os dados que autorizou e fica com o registo desta visita." />
